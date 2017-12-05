@@ -7,6 +7,9 @@ package com.psi.zjqrecyclerview;
 public class Book {
   String name;
 
+  public Book() {
+  }
+
   public Book(String name) {
     this.name = name;
   }

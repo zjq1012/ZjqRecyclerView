@@ -2,9 +2,11 @@ package com.psi.zjqrecyclerview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class BookAdapter extends RecyclerView.Adapter {
   private static final int TYPE_NORMAL = 1;
   private static final int TYPE_HEADER = 2;
   private static final int TYPE_FOOTER = 3;
+
 
   private List<Book> data = new ArrayList();
   private View headerView;
@@ -40,13 +43,30 @@ public class BookAdapter extends RecyclerView.Adapter {
   }
 
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    int itemViewType = getItemViewType(position);
+    if (TYPE_NORMAL != itemViewType) {
+      return;
+    }
+    int realPosition = getRealPosition(position);
+    Book book = data.get(realPosition);
+    BookHolder bookHolder = (BookHolder) holder;
+    bookHolder.tvBook.setText(book.getName());
+  }
 
+  private int getRealPosition(int position) {
+    if (headerView != null) {
+      return position - 1;
+    }
+    return position;
   }
 
   @Override public int getItemViewType(int position) {
-   if (position == 0 && headerView != null){
-     return TYPE_HEADER;
-   } else if (position ==)
+    if (headerView != null && position == 0) {
+      return TYPE_HEADER;
+    } else if (footerView != null && position == getItemCount() - 1) {
+      return TYPE_FOOTER;
+    }
+    return TYPE_NORMAL;
   }
 
   @Override public int getItemCount() {
@@ -60,11 +80,11 @@ public class BookAdapter extends RecyclerView.Adapter {
   }
 
   class BookHolder extends RecyclerView.ViewHolder {
-    private TextView textView;
+    private TextView tvBook;
 
     public BookHolder(View itemView) {
       super(itemView);
-      textView = itemView.findViewById(R.id.tv_book);
+      tvBook = itemView.findViewById(R.id.tv_book);
     }
   }
 
@@ -80,5 +100,41 @@ public class BookAdapter extends RecyclerView.Adapter {
     public FooterHolder(View itemView) {
       super(itemView);
     }
+  }
+
+  public void setHeaderView(View headerView) {
+    this.headerView = headerView;
+    this.notifyItemInserted(0);
+  }
+
+  public void addFooterView(View footerView) {
+    this.footerView = footerView;
+    footerView.post(new Runnable() {
+      @Override public void run() {
+        notifyItemInserted(getItemCount());
+      }
+    });
+  }
+
+  public View getFooterView() {
+    return footerView;
+  }
+
+  public void removeFooterView() {
+    this.notifyItemRemoved(getItemCount());
+    this.footerView = null;
+  }
+
+  public void setData(List<Book> data) {
+    this.data = data;
+    this.notifyDataSetChanged();
+  }
+
+  public void addData(Book data) {
+    if (data == null) {
+      return;
+    }
+    this.data.add(data);
+    notifyItemInserted(getItemCount());
   }
 }
