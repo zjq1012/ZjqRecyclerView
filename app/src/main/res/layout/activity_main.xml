@@ -7,9 +7,11 @@
     android:layout_height="match_parent"
     tools:context="com.psi.zjqrecyclerview.MainActivity"
     >
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/rcv"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      ></android.support.v7.widget.RecyclerView>
+
+    <com.psi.zjqrecyclerview.ZjqRecyclerView
+        android:id="@+id/rcv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:refreshEnable="true"
+        ></com.psi.zjqrecyclerview.ZjqRecyclerView>
 </RelativeLayout>
