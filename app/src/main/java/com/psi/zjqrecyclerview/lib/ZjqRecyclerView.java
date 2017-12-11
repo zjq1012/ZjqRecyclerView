@@ -1,4 +1,4 @@
-package com.psi.zjqrecyclerview;
+package com.psi.zjqrecyclerview.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+import com.psi.zjqrecyclerview.R;
 
 /**
  * Created by dorado on 2017/12/11.
@@ -28,7 +29,8 @@ public class ZjqRecyclerView extends FrameLayout {
     }
 
 
-    public ZjqRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ZjqRecyclerView(
+        @NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         init(attrs);
@@ -103,5 +105,13 @@ public class ZjqRecyclerView extends FrameLayout {
 
     public void setLoading(boolean loading) {
         isLoading = loading;
+    }
+
+
+    /**
+     * 正在刷新
+     */
+    public void setRefreshing(boolean refreshing) {
+        swipeRefreshLayout.setRefreshing(refreshing);
     }
 }

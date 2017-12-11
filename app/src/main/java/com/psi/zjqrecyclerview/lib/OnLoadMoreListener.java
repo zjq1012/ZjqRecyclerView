@@ -1,8 +1,8 @@
-package com.psi.zjqrecyclerview;
+package com.psi.zjqrecyclerview.lib;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import com.psi.zjqrecyclerview.BookAdapter;
 
 /**
  * Created by dorado on 2017/12/5.

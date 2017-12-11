@@ -1,4 +1,4 @@
-package com.psi.zjqrecyclerview;
+package com.psi.zjqrecyclerview.lib;
 
 /**
  * Created by dorado on 2017/12/11.

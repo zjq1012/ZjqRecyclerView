@@ -6,24 +6,67 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import com.psi.zjqrecyclerview.lib.OnLoadMoreListener;
+import com.psi.zjqrecyclerview.lib.RecyclerViewAdapter;
+import com.psi.zjqrecyclerview.lib.RefreshListener;
+import com.psi.zjqrecyclerview.lib.ZjqRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ZjqRecyclerView recyclerView;
-    private BookAdapter bookAdapter;
+    private RecyclerViewAdapter bookAdapter;
     private List<Book> data = new ArrayList<>();
     private int extraCount = 1;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        addData();
+        final View footerView = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_simple_footer, null);
+        footerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        final View headerView = LayoutInflater.from(this).inflate(R.layout.layout_simple_header, null);
+        headerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         recyclerView = (ZjqRecyclerView) findViewById(R.id.rcv);
+        bookAdapter = new BookAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addOnScrollListener(new OnLoadMoreListener() {
+            @Override public void onLoadMore() {
+                if (recyclerView.isLoading()) return;
+                bookAdapter.addFooterView(footerView);
+                recyclerView.setLoading(true);
+                new LoadMoreThread().start();
+            }
+        });
+        recyclerView.setRefreshListener(new RefreshListener() {
+            @Override public void onRefresh() {
+                data.clear();
+                data.add(new Book("1"));
+                data.add(new Book("2"));
+                data.add(new Book("3"));
+                data.add(new Book("4"));
+                data.add(new Book("5"));
+                data.add(new Book("6"));
+                data.add(new Book("7"));
+                data.add(new Book("8"));
+                data.add(new Book("9"));
+                data.add(new Book("10"));
+                bookAdapter.setData(data);
+                recyclerView.setRefreshing(false);
+            }
+        });
+        recyclerView.setAdapter(bookAdapter);
+
+        bookAdapter.setHeaderView(headerView);
+
+        bookAdapter.setData(data);
+    }
+
+
+    private void addData() {
         data.add(new Book("1"));
         data.add(new Book("2"));
         data.add(new Book("3"));
@@ -38,24 +81,6 @@ public class MainActivity extends AppCompatActivity {
         data.add(new Book("12"));
         data.add(new Book("14"));
         data.add(new Book("15"));
-        bookAdapter = new BookAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.addOnScrollListener(new OnLoadMoreListener() {
-            @Override public void onLoadMore() {
-                if (recyclerView.isLoading()) return;
-                View footerView = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_simple_footer, null);
-                footerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                bookAdapter.addFooterView(footerView);
-                recyclerView.setLoading(true);
-                new LoadMoreThread().start();
-            }
-        });
-        recyclerView.setAdapter(bookAdapter);
-
-        View headerView = LayoutInflater.from(this).inflate(R.layout.layout_simple_header, null);
-        bookAdapter.setHeaderView(headerView);
-
-        bookAdapter.setData(data);
     }
 
 

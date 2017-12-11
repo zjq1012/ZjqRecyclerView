@@ -8,10 +8,10 @@
     tools:context="com.psi.zjqrecyclerview.MainActivity"
     >
 
-    <com.psi.zjqrecyclerview.ZjqRecyclerView
+    <com.psi.zjqrecyclerview.lib.ZjqRecyclerView
         android:id="@+id/rcv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:refreshEnable="true"
-        ></com.psi.zjqrecyclerview.ZjqRecyclerView>
+        ></com.psi.zjqrecyclerview.lib.ZjqRecyclerView>
 </RelativeLayout>
