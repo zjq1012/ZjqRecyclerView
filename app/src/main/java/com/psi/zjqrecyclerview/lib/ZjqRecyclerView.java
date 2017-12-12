@@ -47,8 +47,8 @@ public class ZjqRecyclerView extends FrameLayout {
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                if (refreshListener != null) {
-                    refreshListener.onRefresh();
+                if (onRefreshListener != null) {
+                    onRefreshListener.onRefresh();
                 }
             }
         });
@@ -79,11 +79,11 @@ public class ZjqRecyclerView extends FrameLayout {
     /**
      * RefreshListener
      */
-    private RefreshListener refreshListener;
+    private OnRefreshListener onRefreshListener;
 
 
-    public void setRefreshListener(RefreshListener refreshListener) {
-        this.refreshListener = refreshListener;
+    public void setRefreshListener(OnRefreshListener onRefreshListener) {
+        this.onRefreshListener = onRefreshListener;
     }
 
 

@@ -1,5 +1,6 @@
 package com.psi.zjqrecyclerview;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -7,11 +8,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.psi.zjqrecyclerview.lib.OnLoadMoreListener;
+import com.psi.zjqrecyclerview.lib.OnRefreshListener;
 import com.psi.zjqrecyclerview.lib.RecyclerViewAdapter;
-import com.psi.zjqrecyclerview.lib.RefreshListener;
 import com.psi.zjqrecyclerview.lib.ZjqRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +26,25 @@ public class MainActivity extends AppCompatActivity {
     private List<Book> data = new ArrayList<>();
     private int extraCount = 1;
 
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         addData();
-        final View footerView = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_simple_footer, null);
-        footerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        final View headerView = LayoutInflater.from(this).inflate(R.layout.layout_simple_header, null);
-        headerView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        final View footerView = LayoutInflater.from(MainActivity.this)
+            .inflate(R.layout.layout_simple_footer, null);
+        footerView.setLayoutParams(
+            new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        final View headerView = LayoutInflater.from(this)
+            .inflate(R.layout.layout_simple_header, null);
+        headerView.setLayoutParams(
+            new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
         recyclerView = (ZjqRecyclerView) findViewById(R.id.rcv);
         bookAdapter = new BookAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(
+            new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.addOnScrollListener(new OnLoadMoreListener() {
             @Override public void onLoadMore() {
                 if (recyclerView.isLoading()) return;
@@ -41,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 new LoadMoreThread().start();
             }
         });
-        recyclerView.setRefreshListener(new RefreshListener() {
+        recyclerView.setRefreshListener(new OnRefreshListener() {
             @Override public void onRefresh() {
                 data.clear();
                 data.add(new Book("1"));
@@ -114,4 +126,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_to_swipe:
+               startActivity(new Intent(MainActivity.this,SwipeActivity.class));
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
